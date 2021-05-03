@@ -14,7 +14,7 @@ final class BankManager {
   private var currentTicketNumber = 1
   private var totalCompletedCustomer = 0
   
-  func process(_ customers: [Int:Customer], completionHandler: @escaping (()->Void) = { }) {
+  func process(_ customers: [Int:Customer], _ grade: GradeType) {
     if let customer = customers[currentTicketNumber] {
       guard !bankers.isEmpty else {
         operationQueue.waitUntilAllOperationsAreFinished()
@@ -30,7 +30,10 @@ final class BankManager {
       NotificationCenter.default.post(
         name: NSNotification.Name(rawValue: "completedCustomer"),
         object: nil,
-        userInfo: ["ticketNumber":currentTicketNumber])
+        userInfo: [
+          "ticketNumber": currentTicketNumber,
+          "grade": grade
+        ])
 
       currentTicketNumber += 1
 
@@ -39,8 +42,9 @@ final class BankManager {
         
         self.bankers[counterNumber] = workableBanker
         self.totalCompletedCustomer += 1
-        completionHandler()
       }
+    } else {
+      currentTicketNumber += 1
     }
   }
   
@@ -50,5 +54,9 @@ final class BankManager {
 
   func showTotalCompletedCustomer() -> Int {
     return totalCompletedCustomer
+  }
+  
+  func initCurrentTicketNumber(_ ticketNumber: Int) {
+    currentTicketNumber = ticketNumber
   }
 }

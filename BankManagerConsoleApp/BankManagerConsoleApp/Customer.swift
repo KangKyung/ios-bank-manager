@@ -9,12 +9,22 @@ import Foundation
 
 struct Customer: Hashable {
   private let ticketNumber: Int
+  private let grade: GradeType
   
-  init(order orderNumber: Int) {
+  init(order orderNumber: Int, grade: GradeType) {
     self.ticketNumber = orderNumber
+    self.grade = grade
   }
   
   func showTicketNumber() -> Int {
     return ticketNumber
   }
+  
+  func checkGrade() -> GradeType {
+    return grade
+  }
+}
+
+enum GradeType {
+  case VVIP, VIP, normal
 }
