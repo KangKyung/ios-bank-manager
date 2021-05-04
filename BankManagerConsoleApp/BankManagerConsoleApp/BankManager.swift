@@ -56,7 +56,7 @@ final class BankManager {
     return totalCompletedCustomer
   }
   
-  func initCurrentTicketNumber(_ ticketNumber: Int) {
+  func initCurrentTicketNumber(to ticketNumber: Int) {
     currentTicketNumber = ticketNumber
   }
 }

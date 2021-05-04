@@ -25,20 +25,12 @@ extension Bankable {
     repeat {
       if !customersOfVVIP.isEmpty {
         bankManager.process(customersOfVVIP, GradeType.VVIP)
-      } else if !customersOfVIP.isEmpty {
-        if let num = customersOfVIP.first?.key {
-          bankManager.initCurrentTicketNumber(num)
-          bankManager.process(customersOfVIP, GradeType.VIP)
-        } else {
-          continue
-        }
-      } else if !customersOfNormal.isEmpty {
-        if let num = customersOfNormal.first?.key {
-          bankManager.initCurrentTicketNumber(num)
-          bankManager.process(customersOfNormal, GradeType.normal)
-        } else {
-          continue
-        }
+      } else if let ticketNumber = customersOfVIP.first?.key {
+        bankManager.initCurrentTicketNumber(to: ticketNumber)
+        bankManager.process(customersOfVIP, GradeType.VIP)
+      } else if let ticketNumber = customersOfNormal.first?.key {
+        bankManager.initCurrentTicketNumber(to: ticketNumber)
+        bankManager.process(customersOfNormal, GradeType.normal)
       } else {
         isRepeat = false
       }
