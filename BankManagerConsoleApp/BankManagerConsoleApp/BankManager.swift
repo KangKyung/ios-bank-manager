@@ -7,7 +7,7 @@
 
 import Foundation
 
-class Test: Operation {
+class BankWork: Operation {
   private let queue: Queue<Customer>
   private let banker: Banker?
   
@@ -43,21 +43,12 @@ final class BankManager {
   }
   
   private func process(grade: CustomerGrade, _ queue: Queue<Customer>) {
-//    guard !bankers.isEmpty else {
-//      operationQueue.waitUntilAllOperationsAreFinished()
-//      return
-//    }
-    
     let workableBanker = self.bankers.first?.value
     guard let counterNumber = workableBanker?.showCounterNumber() else {
       return
     }
-    
-    if !self.bankers.isEmpty {
-      self.bankers.removeValue(forKey: counterNumber)
-    }
-    
-//    self.bankers.removeValue(forKey: counterNumber)
+
+    self.bankers.removeValue(forKey: counterNumber)
     
     NotificationCenter.default.post(
       name: NSNotification.Name(rawValue: "completedCustomer"),
@@ -66,34 +57,21 @@ final class BankManager {
     
     currentTicketNumber += 1
     
-    let test = Test(queue: queue, workableBanker: workableBanker)
-    test.completionBlock = {
-      guard let testtest = workableBanker else {
-        return
-      }
-      self.bankers[counterNumber] = testtest
+    let bankWork = BankWork(queue: queue, workableBanker: workableBanker)
+    bankWork.completionBlock = {
+      self.bankers[counterNumber] = workableBanker
       self.totalCompletedCustomer += 1
     }
     
     if queue.front?.showGrade() == CustomerGrade.vvip {
-      test.queuePriority = Operation.QueuePriority.veryHigh
+      bankWork.queuePriority = Operation.QueuePriority.veryHigh
     } else if queue.front?.showGrade() == CustomerGrade.vip {
-      test.queuePriority = Operation.QueuePriority.high
+      bankWork.queuePriority = Operation.QueuePriority.high
     } else {
-      test.queuePriority = Operation.QueuePriority.normal
+      bankWork.queuePriority = Operation.QueuePriority.normal
     }
     
- 
-    
-    operationQueue.addOperation(test)
-    
-//    operationQueue.addOperation {
-//      guard let firstElement = queue.front else { return }
-//      workableBanker?.process(firstElement)
-//      self.bankers[counterNumber] = workableBanker
-//      self.totalCompletedCustomer += 1
-//    }
-    
+    operationQueue.addOperation(bankWork)
   }
   
   func setBankCounters(number: Int) {
