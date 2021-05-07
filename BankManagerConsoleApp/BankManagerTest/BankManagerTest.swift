@@ -8,7 +8,7 @@
 import XCTest
 
 class BankManagerTest: XCTestCase {
-  class bankManagerStub {
+  class bankManagerMock{
     let operationQueue: OperationQueue = OperationQueue()
     var customers: [Customer] = []
     
@@ -28,10 +28,10 @@ class BankManagerTest: XCTestCase {
     }
   }
   
-  var bankManager: bankManagerStub!
+  var bankManager: bankManagerMock!
   
   override func setUpWithError() throws {
-    bankManager = bankManagerStub()
+    bankManager = bankManagerMock()
   }
   
   override func tearDownWithError() throws {

@@ -8,7 +8,6 @@
 import XCTest
 
 class CustomerMakerTest: XCTestCase {
-
   var customerMaker: CustomerMaker!
     override func setUpWithError() throws {
       customerMaker = CustomerMaker()
